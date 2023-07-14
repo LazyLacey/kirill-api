@@ -45,3 +45,4 @@ C:\Users\Ann\RiderProjects\newtry\kirill_api\published\kirill_api.deps.json
 C:\Users\Ann\RiderProjects\newtry\kirill_api\published\kirill_api.runtimeconfig.json
 C:\Users\Ann\RiderProjects\newtry\kirill_api\published\kirill_api.dll
 C:\Users\Ann\RiderProjects\newtry\kirill_api\published\kirill_api.pdb
+C:\Users\Ann\RiderProjects\newtry\kirill_api\published\static\NewFile1.txt
