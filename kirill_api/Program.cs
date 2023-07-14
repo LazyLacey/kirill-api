@@ -30,11 +30,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("_myAllowSpecificOrigins");
-Console.WriteLine(builder.Environment.ContentRootPath);
+Console.WriteLine(Directory.Exists(Path.Combine(builder.Environment.ContentRootPath, "static")));
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "app/static")),
+        Path.Combine(builder.Environment.ContentRootPath, "static")),
     RequestPath = "/StaticFiles"
 });
 
