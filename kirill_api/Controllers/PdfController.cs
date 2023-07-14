@@ -18,7 +18,7 @@ public class PdfController : ControllerBase
     
     public class Req
     {
-        public string image { get; set; }
+        public IFormFile image { get; set; }
     }
     
     public static string FixBase64ForImage(string image) {
@@ -38,7 +38,7 @@ public class PdfController : ControllerBase
     
     [HttpPost]
     [Route("add_image")]
-    public async Task<ActionResult> AddImagePage(Req request)
+    public async Task<ActionResult> AddImagePage([FromForm]Req request)
     {
 
         // Create an empty page
@@ -51,66 +51,35 @@ public class PdfController : ControllerBase
         // Get an XGraphics object for drawing
         XGraphics gfx = XGraphics.FromPdfPage(page);
         
-        byte[] data = Convert.FromBase64String(FixBase64ForImage(request.image));
-        
        
         XImage imageToPdf;
-
         
-        using (MemoryStream memstr = new MemoryStream(data, 0, 0, true, true))
-        {
-            
-            imageToPdf = XImage.FromStream(memstr);
-            double x = (imageToPdf.PixelWidth / imageToPdf.PixelHeight) * page.Width;
-
-            gfx.DrawImage(imageToPdf, 0, 0, x , page.Height);
+        var ms = new MemoryStream();
+        request.image.CopyTo(ms);
+        imageToPdf = XImage.FromStream(ms);
         
-            return Ok();
-        }
-        
+        double x = (imageToPdf.PixelWidth / imageToPdf.PixelHeight) * page.Width;
 
-
-        // HttpWebRequest req = (HttpWebRequest)WebRequest.Create(request.image);
-        // HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-        //
-        // XImage imageToPdf;
-        //
-        // if (res.StatusCode == HttpStatusCode.OK)
-        // {
-        //    imageToPdf = XImage.FromStream(res.GetResponseStream());
-        //    double x = (imageToPdf.PixelWidth / imageToPdf.PixelHeight) * page.Width;
-        //
-        //    // gfx.DrawImage(imageToPdf, x, 0);
-        //
-        //
-        //    gfx.DrawImage(imageToPdf, 0, 0, x , page.Height);
-        //
-        //    return Ok();
-        // }
-        //
+        gfx.DrawImage(imageToPdf, 0, 0, x , page.Height);
         
-
-        // XImage imageToPdf = XImage.FromFile(request.image);
-        
-        // double x = (250 - imageToPdf.PixelWidth * 72 / imageToPdf.HorizontalResolution) / 2;
-        //
-        // gfx.DrawImage(imageToPdf, x, 0);
-        //
-        //
-        // // gfx.DrawImage(imageToPdf, 0, 0, width, height);
-        //
-        return StatusCode(400);
+        return Ok();
     }
     
     
     [HttpGet]
     [Route("save_doc")]
-    public ActionResult SavePdf()
+    public ActionResult<string> SavePdf()
     {
         
-        _document.Save("Презенташка.pdf");
-        Console.WriteLine(_document);
-        return Ok();
+        var path = "static";
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        
+        _document.Save("static\\Презенташка.pdf");
+        Console.WriteLine(_document.FullPath);
+        return Ok("/StaticFiles/Презенташка.pdf");
     }
     
 }
