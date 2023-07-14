@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("_myAllowSpecificOrigins");
-
+Console.WriteLine(builder.Environment.ContentRootPath);
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
