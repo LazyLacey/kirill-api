@@ -34,7 +34,7 @@ Console.WriteLine(builder.Environment.ContentRootPath);
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "static")),
+        Path.Combine(builder.Environment.ContentRootPath, "app/static")),
     RequestPath = "/StaticFiles"
 });
 
