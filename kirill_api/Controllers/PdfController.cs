@@ -68,7 +68,7 @@ public class PdfController : ControllerBase
     
     [HttpGet]
     [Route("save_doc")]
-    public ActionResult<string> SavePdf()
+    public FileStreamResult SavePdf()
     {
         
         var path = "static";
@@ -79,7 +79,10 @@ public class PdfController : ControllerBase
         
         _document.Save("static\\Презенташка.pdf");
         Console.WriteLine(_document.FullPath);
-        return Ok("/StaticFiles/Презенташка.pdf");
+        // return Ok("/StaticFiles/Презенташка.pdf");
+        
+        var stream = new FileStream("static\\Презенташка.pdf", FileMode.Open);
+        return File(stream, "application/pdf", "Презенташка.pdf");
     }
     
 }
